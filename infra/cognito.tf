@@ -39,8 +39,3 @@ resource "aws_cognito_user_pool_client" "app_client" {
   generate_secret              = false
   supported_identity_providers = ["COGNITO"]
 }
-
-resource "aws_cognito_user_pool_domain" "cognito_domain" {
-  domain       = "fiap-video-cognito-fase5"
-  user_pool_id = aws_cognito_user_pool.user_pool.id
-}
