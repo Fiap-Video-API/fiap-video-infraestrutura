@@ -20,7 +20,7 @@ resource "aws_cognito_user_pool" "user_pool" {
   }
 
   schema {
-    name                     = "custom:lgpdConsent"
+    name                     = "lgpdConsent"
     attribute_data_type      = "String"
     mutable                  = true
     required                 = false
