@@ -38,4 +38,7 @@ resource "aws_cognito_user_pool_client" "app_client" {
   prevent_user_existence_errors = "ENABLED"
   generate_secret              = false
   supported_identity_providers = ["COGNITO"]
+
+  read_attributes = ["email", "custom:lgpdConsent"]
+  write_attributes = ["email", "custom:lgpdConsent"]
 }
