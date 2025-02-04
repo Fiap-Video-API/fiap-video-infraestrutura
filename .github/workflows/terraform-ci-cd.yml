@@ -1,0 +1,54 @@
+name: Terraform - Infra Cluster AWS EKS, Cognito, SQS, SES
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Read config.json
+        id: read-config
+        run: |
+          ENABLED="$(jq -r '.enabled' ./config.json)"
+          echo "enabled=$(echo $ENABLED)" >> $GITHUB_OUTPUT
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Fmt
+        run: terraform fmt
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Destroy
+        if: steps.read-config.outputs.enabled == 'false'
+        run: terraform destroy -auto-approve -lock=false
+
+      - name: Terraform Plan
+        if: steps.read-config.outputs.enabled == 'true'
+        run: terraform plan -lock=false
+
+      - name: Terraform Apply
+        if: steps.read-config.outputs.enabled == 'true'
+        run: terraform apply -auto-approve -lock=false
