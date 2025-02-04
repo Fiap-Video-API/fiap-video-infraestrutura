@@ -44,15 +44,3 @@ resource "aws_cognito_user_pool_domain" "cognito_domain" {
   domain       = "fiap-video-cognito-fase5"
   user_pool_id = aws_cognito_user_pool.user_pool.id
 }
-
-output "cognito_user_pool_id" {
-  value = aws_cognito_user_pool.user_pool.id
-}
-
-output "cognito_client_id" {
-  value = aws_cognito_user_pool_client.app_client.id
-}
-
-output "cognito_jwks_url" {
-  value = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool.user_pool.id}/.well-known/jwks.json"
-}
