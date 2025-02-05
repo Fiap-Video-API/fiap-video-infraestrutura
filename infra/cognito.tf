@@ -26,6 +26,10 @@ resource "aws_cognito_user_pool" "user_pool" {
     required                 = false
   }
 
+  lifecycle {
+    ignore_changes = [schema]
+  }
+
   tags = {
     Environment = "fiap-video-user-pool"
   }
