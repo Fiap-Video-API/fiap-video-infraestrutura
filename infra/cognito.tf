@@ -1,5 +1,5 @@
 resource "aws_cognito_user_pool" "user_pool" {
-  name                     = "FiapVideoUserPool"
+  name                     = "FiapVideoUserPoolFinal"
   alias_attributes         = ["email"]
   auto_verified_attributes = ["email"]
 
@@ -32,7 +32,7 @@ resource "aws_cognito_user_pool" "user_pool" {
 }
 
 resource "aws_cognito_user_pool_client" "app_client" {
-  name                         = "FiapVideoAppClient"
+  name                         = "FiapVideoAppClientFinal"
   user_pool_id                 = aws_cognito_user_pool.user_pool.id
   explicit_auth_flows          = ["ALLOW_USER_PASSWORD_AUTH", "ALLOW_REFRESH_TOKEN_AUTH"]
   prevent_user_existence_errors = "ENABLED"
