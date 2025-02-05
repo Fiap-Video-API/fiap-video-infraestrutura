@@ -21,7 +21,7 @@ resource "aws_db_instance" "db_instance" {
 resource "aws_security_group" "rds_sg" {
   name        = "rds_security_group"
   description = "Security group para o RDS e DocumentDB"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = module.vpc_rds.vpc_id
   ingress {
     from_port   = 3306 # Porta MySQL (RDS)
     to_port     = 3306
@@ -44,7 +44,7 @@ resource "aws_security_group" "rds_sg" {
 
 # Virtual Private Cloud - Rede virtual AWS
 # https://registry.terraform.io/modules/terraform-aws-modules/vpc/aws/latest
-module "vpc" {
+module "vpc_rds" {
 
   source = "terraform-aws-modules/vpc/aws" 
   name = "vpc-databases" 
@@ -66,7 +66,7 @@ module "vpc" {
 }
 
 resource "aws_subnet" "database_subnet_az1" {
-  vpc_id            = module.vpc.vpc_id
+  vpc_id            = module.vpc_rds.vpc_id
   cidr_block        = "10.0.5.0/24"
   availability_zone = "us-east-1a"
   tags = {
@@ -75,7 +75,7 @@ resource "aws_subnet" "database_subnet_az1" {
 }
 
 resource "aws_subnet" "database_subnet_az2" {
-  vpc_id            = module.vpc.vpc_id
+  vpc_id            = module.vpc_rds.vpc_id
   cidr_block        = "10.0.6.0/24"
   availability_zone = "us-east-1b"
   tags = {
@@ -86,7 +86,7 @@ resource "aws_subnet" "database_subnet_az2" {
 #Subnet group
 resource "aws_db_subnet_group" "db_subnet_group" {
   name       = "db-subnet-group"
-  subnet_ids =  module.vpc.public_subnets
+  subnet_ids =  module.vpc_rds.public_subnets
   tags = {
     Name = "db_subnet_group"
   }
